@@ -1,0 +1,57 @@
+#!/bin/sh
+
+### 시작 메뉴 출력 ###
+menu()
+{
+	echo '=============================='
+	echo '호스팅 서버 자동 등록 프로그램'
+	echo '=============================='
+	echo '  1) 신규 호스팅 등록'
+	echo '  2) 호스팅 상품 변경'
+	echo '  3) hostname 재전송'
+	echo '  h) 도움말'
+	echo '  q) 프로그램 종료'
+}
+### 추가 작업여부 확인 함수 ###
+question1()
+{
+	while :
+	do
+		read -p "다음 작업을 진행하시겠습니까? (y or n) :" que
+		case $que in
+		y)
+			break;;
+		n)
+			echo "프로그램을 종료합니다"
+			exit;;
+		*)
+			echo "오직 y나 n만 입력할 수 있습니다"
+		esac
+	done
+}
+#./cronset.sh ### crond 설정
+
+while :
+do
+	clear
+	menu ### 메뉴 출력
+	read -p "선택 : " i ### 메뉴 선택
+	case $i in
+	1)
+		./clientadd.sh ### 신규 호스팅 등록 스크립트 호출
+		question1;; ### 추가작업여부 질의
+	2)
+		./lvmextend.sh ### 가입상품 변경 스크립트 호출
+		question1;;
+	3)
+		./hostrsend.sh ### hostname 재전송 스크립트 호출
+		question1;;
+	q)
+		echo "프로그램을 종료합니다"
+		break;;
+	h)
+		vi -R HELPME;; ### 도움말 실행(읽기모드)
+	*)
+		echo "숫자 1-3중에 선택하세요"
+	esac
+done
